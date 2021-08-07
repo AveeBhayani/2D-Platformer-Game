@@ -15,6 +15,7 @@ public class GameOverController : MonoBehaviour
 
     public void PlayerDied()
     {
+        SoundManager.Instance.Play(Sounds.PlayerDeath);
         gameObject.SetActive(true);
     }
 
@@ -22,5 +23,6 @@ public class GameOverController : MonoBehaviour
     {
         Scene scene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(scene.buildIndex);
+        SoundManager.Instance.Play(Sounds.ButtonClick);
     }
 }

@@ -9,7 +9,6 @@ using System;
 public class LevelLoader : MonoBehaviour
 {
     private Button Button;
-
     public string LevelName;
 
     private void Awake()
@@ -20,6 +19,21 @@ public class LevelLoader : MonoBehaviour
 
     private void OnClick()
     {
-        SceneManager.LoadScene(LevelName);
+        LevelStatus levelStatus = LevelManager.Instance.GetLevelStatus(LevelName);
+
+        switch (levelStatus)
+        {
+            case LevelStatus.Locked:
+                break;
+
+            case LevelStatus.Unlocked:
+                SceneManager.LoadScene(LevelName);               
+                break;
+
+            case LevelStatus.Completed:
+                SceneManager.LoadScene(LevelName);               
+                break;
+        }
+        SoundManager.Instance.Play(Sounds.ButtonClick);
     }
 }

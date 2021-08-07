@@ -7,18 +7,15 @@ public class PatrolAI : MonoBehaviour
 {
     [HideInInspector]
     public bool mustPatrol;
-
     public float speed;  
     public Transform GroundDetection;
     public Animator animator;
-
-    // Start is called before the first frame update
+    
     void Start()
     {
         mustPatrol = true;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(mustPatrol)

@@ -12,9 +12,10 @@ public class PlayerController : MonoBehaviour
     public int transition;
     public float jump;
     public bool grounded;
+    public ParticleSystem Death;
+    public ParticleSystem Hurt;
 
     public ScoreController ScoreController;
-    //public GameOverController GameOverController;
     public LivesController LivesController;
 
     private Rigidbody2D rigid;
@@ -25,12 +26,18 @@ public class PlayerController : MonoBehaviour
         rigid = gameObject.GetComponent<Rigidbody2D>();
     }
 
-    public void KillPlayer()
+    public void HurtPlayer()
     {
-        //GameOverController.PlayerDied();
         //this.enabled = false;
         LivesController.LifeReducer();
         animator.SetBool("Hurt", true);
+        Invoke("StopAnimation", 0.3f);
+        Hurt.Play();
+    }
+
+    public void StopAnimation()
+    {
+        animator.SetBool("Hurt", false);
     }
 
     public void Update()
@@ -40,8 +47,7 @@ public class PlayerController : MonoBehaviour
 
         MoveCharacter(horizontal,vertical);
         PlayMovementAnimation(horizontal,vertical);
-        CrouchAnimation();
-        AttackAnimation();
+        PlayAnimation();
         Teleporter();
 
     }
@@ -53,7 +59,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.name == "Ground")
+        if (collision.gameObject.name == "Ground" || collision.gameObject.name == "FallingBridge")
         {
             grounded = true;
         }      
@@ -61,7 +67,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.name == "Ground")
+        if (collision.gameObject.name == "Ground" || collision.gameObject.name == "FallingBridge")
         {
             grounded = false;
         }       
@@ -88,24 +94,21 @@ public class PlayerController : MonoBehaviour
         Vector3 position = transform.position;
         position.x += horizontal * speed * Time.deltaTime;
         transform.position = position;
+        //SoundManager.Instance.Play(Sounds.PlayerRun);
 
-        if(Input.GetKeyDown(KeyCode.Space) && grounded == true)
+        animator.SetBool("Jump", (Input.GetKeyDown(KeyCode.Space) && grounded == true));
+
+        if (Input.GetKeyDown(KeyCode.Space) && grounded == true)
         {
-            rigid.AddForce(new Vector2(0f, jump), ForceMode2D.Impulse);
-            animator.SetBool("Jump", true);
-        }
-        else
-        {
-            animator.SetBool("Jump", false);
-        }
+            rigid.AddForce(new Vector2(0f, jump), ForceMode2D.Impulse);            
+        }        
     }
 
     private void PlayMovementAnimation(float horizontal,float vertical)
     {
-        // Run Animation
         if (grounded == true)
         {
-            animator.SetFloat("Speed", Mathf.Abs(horizontal));
+            animator.SetFloat("Speed", Mathf.Abs(horizontal));           
         }
         
         Vector3 scale = transform.localScale;
@@ -122,38 +125,17 @@ public class PlayerController : MonoBehaviour
         transform.localScale = scale;
     }
 
-    public void CrouchAnimation()
+    public void PlayAnimation()
     {
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            animator.SetBool("Crouch", true);
-        }
-        else
-        {
-            animator.SetBool("Crouch", false);
-        }
+        animator.SetBool("Crouch", (Input.GetKey(KeyCode.LeftControl)));
+        animator.SetBool("Attack", (Input.GetKeyDown(KeyCode.E)));
     }
-
-    public void AttackAnimation()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            animator.SetBool("Attack", true);
-        }
-        else
-        {
-            animator.SetBool("Attack", false);
-        }
-    }
-    
+      
     public void Teleporter()
     {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            if (currentTeleporter != null)
-            {
-                transform.position = currentTeleporter.GetComponent<Teleporter>().GetDestionation().position;
-            }
+        if (Input.GetKeyDown(KeyCode.T) && (currentTeleporter != null))
+        {            
+                transform.position = currentTeleporter.GetComponent<Teleporter>().GetDestionation().position;           
         }
     }
 }

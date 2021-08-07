@@ -12,25 +12,9 @@ public class KeyUIController : MonoBehaviour
     {
         Debug.Log("Test");
         Key -= 1;
-
-        if (Key < 3)
-        {
-            //animator.SetBool("Animation", true);
-            Destroy(KeysUI[0].gameObject);
-        }
-
-        if (Key < 2)
-        {
-            //animator.SetBool("Animation", true);
-            Destroy(KeysUI[1].gameObject);
-        }
-
-        if (Key == 0)
-        {
-            //animator.SetBool("Animation", true);
-            Destroy(KeysUI[2].gameObject);            
-        }
-
+        
+        //animator.SetBool("Animation", true);
+        Destroy(KeysUI[3-Key].gameObject);          
     }
 }
 

@@ -14,11 +14,6 @@ public class ScoreController : MonoBehaviour
         ScoreText = GetComponent<TextMeshProUGUI>();
     }
 
-    private void Start()
-    {
-        RefreshUI();
-    }
-
     public void IncreaseScore(int increment)
     {
         score += increment;

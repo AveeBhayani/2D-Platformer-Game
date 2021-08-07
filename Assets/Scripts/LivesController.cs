@@ -12,38 +12,12 @@ public class LivesController : MonoBehaviour
 
     public void LifeReducer()
     {
-        Debug.Log("Test");
-        Life -= 1;
-
-        if (Life < 5)
-        {
-            //animator.SetBool("Enemy", true);
-            Destroy(LivesUI[0].gameObject, 1);           
-        }
-
-        if (Life < 4)
-        {
-            //animator.SetBool("Enemy", true);
-            Destroy(LivesUI[1], 1);
-        }
-
-        if (Life < 3)
-        {
-            //animator.SetBool("Enemy", true);
-            Destroy(LivesUI[2], 1);
-        }
-
-        if (Life < 2)
-        {
-            //animator.SetBool("Enemy", true);
-            Destroy(LivesUI[3], 1);
-        }
-        if (Life == 0)
-        {
-            //animator.SetBool("Enemy", true);
-            Destroy(LivesUI[4], 1);
+        Life -= 1;      
+        Destroy(LivesUI[4-Life].gameObject, 1);  
+        
+         if (Life == 0)
+        {    
             GameOverController.PlayerDied();
         }
-
     }
 }

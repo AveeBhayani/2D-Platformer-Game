@@ -37,13 +37,11 @@ public class MainSceneManager : MonoBehaviour
     private void QuitGame()
     {
         Application.Quit();
-        Debug.Log("Clicked Quit");
     }
 
     private void StartGame()
     {
         SceneManager.LoadScene(1);
-        Debug.Log("Clicked Start");
     }
 
 }
